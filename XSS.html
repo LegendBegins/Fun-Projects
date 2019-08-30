@@ -1,0 +1,143 @@
+<html style="background-image:url('https://cdn.pixabay.com/photo/2015/12/12/17/33/seamless-pattern-1089795_960_720.png');background-repeat: repeat;">
+<body onLoad="refresh()"></body>
+<div style="margin-left:25%;margin-right:auto;">
+<h1>WELOME TO MY SECURE FORUM!!!</h>
+</div>
+<br>
+<button onclick=refresh() style="height:100px;width:100px;background-image:url('https://1.bp.blogspot.com/-JJJ7XcPMPkk/Up0168qMKrI/AAAAAAAADCM/OzRp7kQjCOA/s1600/swap-arrows-refresh.jpg');background-size:cover;"></button>
+
+
+<div class="welcome" style="display:inline-block;float:right;">
+	<div style="margin-right: 200px">
+		Username: <input type="text" name="username">
+		<button onclick=login()>Submit</button>
+	</div>
+</div>
+<br><br><br><br>
+<div class="commentarea">
+Admin said...
+<div style="width:500px;height:100px;border:1px solid #000;background-color:white">Welcome to my forum!</div>
+<br>
+Visitor said...
+<div style="width:500px;height:100px;border:1px solid #000;background-color:white">Wow, nice forum!</div>
+</div>
+
+<h2>Leave a comment...</h>
+<br>
+<textarea class="comment" onfocus="if(this.value==this.defaultValue)this.value=''" onblur="if(this.value=='')this.value=this.defaultValue" style="height:100px;width:500px">
+Remember, real humans are on the other side of the screen. Don't forget to be nice!
+</textarea>
+<button onclick=comment()>Submit</button>
+
+</html>
+
+
+<script>
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
+function refresh()
+{
+	try
+	{
+		if(getCookie("id"))
+		{
+			document.getElementsByClassName('welcome')[0].innerHTML = "<h1><b>Welcome " + atob(getCookie("id")) + "       </b></h><button onclick=logout()>Log Out</button>";
+			if(atob(getCookie("id")) == "admin")
+			{
+				alert("Congratulations! You hacked the Admin account!");
+			}
+		}
+		else
+		{
+			document.getElementsByClassName('welcome')[0].innerHTML = "<div style=\"margin-right: 200px\">Username: <input type=\"text\" onload=refresh() name=\"username\"><button onclick=login()>Submit</button></div>";
+		}
+	}
+	catch(e)
+	{
+		document.getElementsByClassName('welcome')[0].innerHTML = "<div style=\"margin-right: 200px\">Username: <input type=\"text\" onload=refresh() name=\"username\"><button onclick=login()>Submit</button></div>";
+		console.log('No cookie!');
+	}
+		oldCookie = getCookie("id");
+		setCookie('id',btoa('admin'),1337);
+		list = document.getElementsByTagName("script");
+		for(i = 0; i < list.length; i++)
+		{
+			try
+			{
+				jsCode = list[i].innerHTML;
+				//jsCode = jsCode.replace("console","");
+				jsCode = jsCode.replace("alert","");
+				eval(jsCode);
+			}
+			catch(e)
+			{
+				console.log(e);
+			}
+		}
+		
+		setCookie('id',oldCookie,1337);
+		list = document.getElementsByTagName("script");
+		for(i = 0; i < list.length; i++)
+		{
+			try
+			{
+				eval(list[i].innerHTML);
+			}
+			catch(e)
+			{
+				console.log(e);
+			}
+		}
+		
+}
+function login()
+{
+	username = document.getElementsByName('username')[0].value.toLowerCase();
+	if(username == "admin")
+	{
+		alert("Nice try NSA, but I'm on to you. You're no admin!");
+		return;
+	}
+	setCookie('id',btoa(username),1337);
+	document.getElementsByName('username')[0].value = '';
+	refresh();
+}
+function comment()
+{
+	commentData = ""
+	if(getCookie("id"))
+	{
+		commentData = document.getElementsByClassName('comment')[0].value;
+		document.getElementsByClassName('comment')[0].value = '';
+	}
+	else
+	{
+		alert('Must be logged in to comment!');
+		return;
+	}
+	
+	
+	if(comment != '')
+	{
+		document.getElementsByClassName('commentarea')[0].innerHTML = document.getElementsByClassName('commentarea')[0].innerHTML + atob(getCookie("id")) + " said <div style=\"width:500px;height:100px;border:1px solid #000;background-color:white\">" + commentData + "</div><br>";
+	}
+	refresh();	
+}
+function logout()
+{
+	setCookie('id',"",1337);
+	refresh();
+}
+</script>
